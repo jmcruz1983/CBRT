@@ -34,6 +34,7 @@ CBRT requires:
 ### OBSERVATIONS:
 * Specific ATH revision is checked-out as it is known to be compatible with Jenkins 2.61.
 * CBTR offers the possibility of running test using different versions of Jenkins, Maven and Chrome driver.
+* First time running would take longer as needs to setup everything. Consecutives runs would be faster as eveything is already setup.
 
 ### EXAMPLES OF USAGE:
 

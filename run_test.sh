@@ -8,6 +8,7 @@ export PATH=/usr/local/bin:$PATH
 
 #BINs
 git_bin=`which git`
+kill_bin=`which kill`
 curl_bin=`which curl`
 unzip_bin=`which unzip`
 
@@ -43,14 +44,13 @@ usage()
 
 tear_down(){
     # Tear-down environment
-    if [ ! -z $JUT_PID ]; then
-        kill -9 $JUT_PID
+    if [ ! -z "$JUT_PID" ]; then
+        $kill_bin -9 $JUT_PID
     fi
     pid_list=$(ps -ef | grep -i chrome | grep -v grep | awk '{print $2}')
-    if [ ! -z $pid_list ]; then
-        kill -9 $pid_list
+    if [ ! -z "$pid_list" ]; then
+        $kill_bin -9 $pid_list
     fi
-    #ps -ef | grep -i chrome | grep -v grep | awk '{print $2}' | xargs kill -9
 }
 
 run_jut_server(){
@@ -208,7 +208,7 @@ print_green "> Starting JUT server with Jenkins Version $jenkins_ver"
 run_jut_server
 print_green "> JUT server is ready!"
 
-print_green "> Running  $test_name"
+print_green "> Running $test_name"
 export BROWSER=chrome
 $mvn_bin -q surefire-report:report -Dtest=$test_name
 
