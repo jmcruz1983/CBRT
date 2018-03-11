@@ -4,7 +4,7 @@
 
 This is the solution to take-home exercise **Part I**.
 
-Solution to Part II can be found on a separated file.
+Solution to **Part II** can be found in [Risk Analysis](docs/risk_analysis.pdf) pdf file located inside docs subfolder.
 
 This is a simple script that automates the setup of acceptance test harness (ATH) in order to run tests with a specifc jenkins version. 
 
