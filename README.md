@@ -1,5 +1,7 @@
 ## CloudBees Test Runner (CBRT)
 
+![](images/cloudbees.gif)
+
 ### WHAT IT IS:
 
 This is the solution to take-home exercise **Part I**.
@@ -12,13 +14,14 @@ This is a simple script that automates the setup of acceptance test harness (ATH
 
 CBRT requires:
 * Mac-OSx
-* Java
+* Java 8
 * Curl
 * Chrome
 
 #### WHY?
 * Script was developed using my personal Mac laptop.
 * Java, Chrome and Curl require admin priviledges to be installed.
+* Java 8 is required due to compatibility with the specific checked-out code revision.
 * I chose Chrome as it is one of most used and spread web explorers.
 * Rest of dependecies like maven, chromedriver, jenkins war and ATH code are fetched using  curl.
 
@@ -28,7 +31,7 @@ CBRT requires:
 	* Download dependecies
 	* Setup dependecies 
 	* Run test
-	* Generate test report
+	* Generate and open test report
 3. THIRD, Run ```./run_test.sh -h``` to get some help about usage.
 
 ### OBSERVATIONS:
@@ -49,4 +52,3 @@ Usage: run_test.sh options (-c chromedriver_version) (-m mvn_version) (-j jenkin
 -u                       :  clean-up before testing
 -h                       :  show this help
 ```
-![](images/cloudbees.gif)

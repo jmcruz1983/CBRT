@@ -21,7 +21,7 @@ jenkins_ver=2.61
 chromedriver_ver=2.36
 no_color='\033[0m'
 green_color='\e[92m'
-java_home=$(/usr/libexec/java_home)
+java_home_18=$(find /Library/Java -name 'Home' | grep 1.8)
 git_rev=63fa5aeaa3b59492ce4ea8f11ceab243e4a8afb8
 
 # DIRs
@@ -188,7 +188,7 @@ cd $harness_dir
 $git_bin checkout $git_rev --quiet
 
 # Set JAVA_HOME
-export JAVA_HOME=$java_home
+export JAVA_HOME=$java_home_18
 
 # Setup maven depencencies
 mvn_bin=`which mvn`
