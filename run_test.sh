@@ -10,12 +10,15 @@ export PATH=/usr/local/bin:$PATH
 git_bin=`which git`
 kill_bin=`which kill`
 curl_bin=`which curl`
+find_bin=`which find`
+mkdir_bin=`which mkdir`
 unzip_bin=`which unzip`
 
 # VARs
 debug=false
 clean_up=false
 mvn_ver=3.5.2
+skip_tests=false
 test_name=ScriptTest
 jenkins_ver=2.61
 chromedriver_ver=2.36
@@ -32,12 +35,13 @@ harness_dir=$base_dir/harness
 
 usage()
 {
-	echo "Usage: `basename $0` options (-c chromedriver_version) (-m mvn_version) (-j jenkins_version) (-t test_name) (-d) (-u) (-h)";
+	echo "Usage: `basename $0` options (-c chromedriver_version) (-m mvn_version) (-j jenkins_version) (-t test_name) (-d) (-n) (-u) (-h)";
 	echo "-c chromedriver_version  :  specify chrome driver version (default $chromedriver_ver)"
 	echo "-m mvn_version           :  specify mvn version (default $mvn_ver)"
 	echo "-j jenkins_version       :  specify jenkins version (default $jenkins_ver)"
 	echo "-t test_name             :  specify test to run (default $test_name)"
 	echo "-d                       :  enable verbose output"
+	echo "-n                       :  skip tests and run IDE"
 	echo "-u                       :  clean-up before testing"
 	echo "-h                       :  show this help"
 }
@@ -73,11 +77,17 @@ run_jut_server(){
     done
 }
 
+run_ide(){
+    # Run IDE
+    idea_bin=$($find_bin /Applications -type f -name idea -print -quit)
+    "$idea_bin"
+}
+
 print_green(){
     printf "$green_color$1$no_color\n"
 }
 
-while getopts "c:m:j:t:duh" option; do
+while getopts "c:m:j:t:dnuh" option; do
     case $option in
         c )
             chromedriver_ver=$OPTARG
@@ -94,6 +104,9 @@ while getopts "c:m:j:t:duh" option; do
         d )
             set -x
             debug=true
+            ;;
+        n )
+            skip_tests=true
             ;;
         u )
             clean_up=true
@@ -130,8 +143,8 @@ fi
 
 #Download dependencies
 print_green "> Downloading dependencies"
-mkdir -p $dw_dir
-mkdir -p $bin_dir
+$mkdir_bin -p $dw_dir
+$mkdir_bin -p $bin_dir
 
 # Setup maven
 mvn_home=$bin_dir/apache-maven-$mvn_ver
@@ -207,14 +220,20 @@ $mvn_bin -q install -DskipTests
 print_green "> Starting JUT server with Jenkins Version $jenkins_ver"
 run_jut_server
 print_green "> JUT server is ready!"
-
-print_green "> Running $test_name"
 export BROWSER=chrome
-$mvn_bin -q surefire-report:report -Dtest=$test_name
 
-print_green "> Generate test report"
-# Need to run site like this to avoid NoClassDefFoundError with DependencyFilter
-$mvn_bin -q org.apache.maven.plugins:maven-site-plugin:2.2:site
+if [ $skip_tests == true ]; then
+    $mvn_bin -q generate-resources
+    run_ide
+else
+    print_green "> Running $test_name"
+    $mvn_bin -q surefire-report:report -Dtest=$test_name
 
-print_green "> Open test report"
-open $harness_dir/target/site/surefire-report.html
+    print_green "> Generate test report"
+    # Need to run site like this to avoid NoClassDefFoundError with DependencyFilter
+    $mvn_bin -q org.apache.maven.plugins:maven-site-plugin:2.2:site
+
+    print_green "> Open test report"
+    open $harness_dir/target/site/surefire-report.html
+fi
+
