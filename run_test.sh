@@ -79,8 +79,9 @@ run_jut_server(){
 
 run_ide(){
     # Run IDE
+    idea_log=$bin_dir/idea.log
     idea_bin=$($find_bin /Applications -type f -name idea -print -quit)
-    "$idea_bin"
+    "$idea_bin" &> $idea_log
 }
 
 print_green(){
@@ -223,6 +224,7 @@ print_green "> JUT server is ready!"
 export BROWSER=chrome
 
 if [ $skip_tests == true ]; then
+    print_green "> Starting IDE"
     $mvn_bin -q generate-resources
     run_ide
 else

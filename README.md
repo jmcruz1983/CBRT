@@ -17,6 +17,7 @@ CBRT requires:
 * Java 8
 * Curl
 * Chrome
+* IntelliJ IDEA, if running IDE
 
 #### WHY?
 * Script was developed using my personal Mac laptop.
@@ -43,12 +44,19 @@ CBRT requires:
 
 ``` bash
 Juans-MacBook-Pro:cloudbees jmcruz$ ./run_test.sh -h
-Usage: run_test.sh options (-c chromedriver_version) (-m mvn_version) (-j jenkins_version) (-t test_name) (-d) (-u) (-h)
+Usage: run_test.sh options (-c chromedriver_version) (-m mvn_version) (-j jenkins_version) (-t test_name) (-d) (-n) (-u) (-h)
 -c chromedriver_version  :  specify chrome driver version (default 2.36)
 -m mvn_version           :  specify mvn version (default 3.5.2)
 -j jenkins_version       :  specify jenkins version (default 2.61)
 -t test_name             :  specify test to run (default ScriptTest)
 -d                       :  enable verbose output
+-n                       :  skip tests and run IDE
 -u                       :  clean-up before testing
 -h                       :  show this help
 ```
+
+### RUNNING IDE
+You can avoid to run test automatically and open the IDE. For this you need to run following command ```./run_test.sh -n```.
+
+This option allows you to debug and run test manually on the IntelliJ IDEA IDE.
+![](images/cloudbees_ide.gif)
